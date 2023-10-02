@@ -4,9 +4,12 @@ const { handleHttpError } = require("../utils/handleError");
 
 const getItems = async (req, res) => {
   try {
+    //para saber quien es la persona que esta consumiendo la peticion, la llamamos por medio de los datos de la sesion
+    const user = req.user;
+
     const data = await inventoryModel.findAll();
 
-    res.send({ data });
+    res.send({ data, user });
   } catch (error) {
     handleHttpError(res, "ERROR_GET_ITEMS");
   }

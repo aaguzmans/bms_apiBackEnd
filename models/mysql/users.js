@@ -49,6 +49,7 @@ const User = sequelize.define(
     },
     email: {
       type: DataTypes.STRING,
+      unique:true,
     },
     username: {
       type: DataTypes.STRING,
