@@ -1,0 +1,35 @@
+const { sequelize } = require("../../config/mysql");
+const { DataTypes } = require("sequelize");
+
+const Service = sequelize.define(
+  "service",
+  {
+    id: {
+      type: DataTypes.SMALLINT,
+      primaryKey: true,
+    },
+    code: {
+      type: DataTypes.STRING,
+    },
+    name: {
+      type: DataTypes.STRING,
+    },
+    descriptionService: {
+      type: DataTypes.STRING,
+    },
+    cost: {
+      type: DataTypes.FLOAT,
+    },
+    deletedAt: { // Agrega la columna "deletedAt" para soft delete
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
+  },
+  {
+    tableName: "service",
+    timestamps: true,
+    paranoid: true, // Habilita el soft Delete
+  }
+);
+
+module.exports = Service;

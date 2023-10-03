@@ -3,9 +3,9 @@ const router = express.Router();
 const authMiddleware = require("../middleware/session")
 const checkRol  = require("../middleware/rol")
 const { validatorGetItem, validatorCreateItem } = 
-require("../validators/inventory")
+require("../validators/disease")
 const { getItems, getItem, createItem, updateItem, deleteItem } = 
-require("../controllers/inventory");
+require("../controllers/disease");
 
 router.get("/", authMiddleware, checkRol(["admin"]), getItems);
 

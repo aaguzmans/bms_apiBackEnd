@@ -36,7 +36,7 @@ const loginCtrl = async (req, res) => {
     const body = matchedData(req);
     const user = await userModel.findOne({
       where: { email: body.email },
-      attributes: ["id","name", "password", "email", "rol"],
+      attributes: ["id","username", "password", "email", "rol"],
     });
 
     if (!user) {
