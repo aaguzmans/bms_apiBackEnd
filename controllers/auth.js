@@ -17,7 +17,7 @@ const registerCtrl = async (req, res) => {
     //dataUser.set("password", undefined, { strict:false });
 
     const token = await tokenSign(dataUser);
-    //--------adicionalmente crea el JWT--------------------------- NO ESTA DEVOLVIENDO DATOS DE PAYLOAD
+    //--------adicionalmente crea el JWT---------------------------
     const data = {
       token: token,
       user: dataUser,
