@@ -1,17 +1,36 @@
 const { matchedData } = require("express-validator");
 const { encrypt, compare } = require("../utils/handlePassword");
 const { tokenSign } = require("../utils/handleJwt");
-const { userModel } = require("../models");
+const { userModel, companyModel } = require("../models");
 const { handleHttpError } = require("../utils/handleError");
 
 const registerCtrl = async (req, res) => {
   try {
     req = matchedData(req);
 
+    // Crear la compañía para generar su ID
+    await companyModel.create({
+      companyName: req.companyName,
+    });
+
+    // Obtener el registro de la compañía usando companyName
+    const company = await companyModel.findOne({
+      where: { companyName: req.companyName },
+    });
+
+    if (!company) {
+      handleHttpError(res, "COMPANY_NOT_FOUND");
+      return;
+    }
+
+    // Obtener el ID de la compañía recién creada
+    const companyId = company.id;
+
     const password = await encrypt(req.password);
+
     //spread operator, nos permite
     // copiar una parte de un elemento array o un objeto
-    const body = { ...req, password };
+    const body = { ...req, password, companyId: companyId }; // Asocia el usuario a la compañía recién creada.
 
     const dataUser = await userModel.create(body);
     //dataUser.set("password", undefined, { strict:false });
@@ -31,12 +50,11 @@ const registerCtrl = async (req, res) => {
 };
 
 const loginCtrl = async (req, res) => {
-
   try {
     const body = matchedData(req);
     const user = await userModel.findOne({
       where: { email: body.email },
-      attributes: ["id","username", "password", "email", "rol"],
+      attributes: ["id", "companyId", "username", "password", "email", "rol"],
     });
 
     if (!user) {
@@ -54,7 +72,7 @@ const loginCtrl = async (req, res) => {
       return;
     }
 
-    user.set('password',undefined, {stric:false})
+    user.set("password", undefined, { stric: false });
     //--------adicionalmente consulta el JWT---------------------------
     const tokenJwt = await tokenSign(user);
 

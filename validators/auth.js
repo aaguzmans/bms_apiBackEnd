@@ -2,6 +2,8 @@ const { check } = require("express-validator");
 const validateResults = require("../utils/handleValidator");
 
 const validatorRegister = [
+  check("companyName").exists().notEmpty(),
+  check("companyId"),
   check("name").exists().notEmpty(),
   check("username").exists().notEmpty(),
   check("password").exists().notEmpty(),

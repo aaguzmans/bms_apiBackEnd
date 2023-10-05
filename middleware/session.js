@@ -27,7 +27,7 @@ const authMiddleware = async (req, res, next) => {
 
     //filtro la data para saber quien es el usuario que realizo esta peticion
     const user = await userModel.findByPk(dataToken.id, {
-      attributes: ["id", "username", "rol"],
+      attributes: ["id", "companyId", "username", "rol"],
     });
 
     req.user = user;

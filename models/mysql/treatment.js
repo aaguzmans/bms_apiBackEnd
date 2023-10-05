@@ -8,7 +8,10 @@ const Treatment = sequelize.define(
       type: DataTypes.SMALLINT,
       primaryKey: true,
     },
-    name: {
+    companyId: {
+      type: DataTypes.SMALLINT,
+    },
+    treatmentName: {
       type: DataTypes.STRING,
     },
     dose: {

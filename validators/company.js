@@ -2,13 +2,13 @@ const { check } = require("express-validator");
 const validateResults = require("../utils/handleValidator");
 
 const validatorCreateItem = [
-  check("name").exists().notEmpty(),
+  check("companyName").exists().notEmpty(),
   check("address").isLength({ max: 100 }),
   check("city").isLength({ max: 50 }),
   check("state").isLength({ max: 50 }),
   check("postalCode").isLength({ max: 10 }),
   check("countryId"),
-  check("phone").isLength({ max: 15 }),
+  check("phoneNumber").isLength({ max: 15 }),
   check("email").isLength({ max: 50 }),
   check("website").isLength({ max: 50 }),
   check("description").isLength({ max: 200 }),

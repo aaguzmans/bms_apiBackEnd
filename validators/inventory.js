@@ -2,9 +2,10 @@ const { check } = require("express-validator");
 const validateResults = require("../utils/handleValidator");
 
 const validatorCreateItem = [
+  check("companyId"),
   check("code").isLength({ max: 20 }),
   check("cabys").isLength({ max: 20 }),
-  check("name").exists().notEmpty(),
+  check("inventoryName").exists().notEmpty(),
   check("description").isLength({ max: 500 }),
   check("quantity").isNumeric(),
   check("measurementId"),

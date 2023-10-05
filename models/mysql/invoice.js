@@ -8,6 +8,9 @@ const Invoice = sequelize.define(
       type: DataTypes.SMALLINT,
       primaryKey: true,
     },
+    companyId: {
+      type: DataTypes.SMALLINT,
+    },
     code: {
       type: DataTypes.STRING,
     },

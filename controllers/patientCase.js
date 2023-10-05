@@ -1,13 +1,22 @@
 const { matchedData } = require("express-validator");
-const { patientCase } = require("../models");
+const { patientCaseModel } = require("../models");
 const { handleHttpError } = require("../utils/handleError");
 
 const getItems = async (req, res) => {
   try {
+
     //para saber quien es la persona que esta consumiendo la peticion, la llamamos por medio de los datos de la sesion
     const user = req.user;
 
-    const data = await patientCase.findAll();
+    // Obtener el ID de la compañía asociada al usuario
+    const companyId = user.companyId;
+
+    // Consulta los registros donde companyId coincida con user.companyId
+    const data = await patientCaseModel.findAll({
+      where: {
+        companyId: companyId
+      }
+    });
 
     res.send({ data, user });
   } catch (error) {
@@ -17,11 +26,23 @@ const getItems = async (req, res) => {
 
 const getItem = async (req, res) => {
   try {
+    //para saber quien es la persona que esta consumiendo la peticion, la llamamos por medio de los datos de la sesion
+    const user = req.user;
+
+    // Obtener el ID de la compañía asociada al usuario
+    const companyId = user.companyId;
+
     req = matchedData(req);
     const { id } = req;
-    const data = await patientCase.findByPk(id);
+    // Consulta el registro por su clave primaria (id) y donde companyId coincida con user.companyId
+    const data = await patientCaseModel.findOne({
+      where: {
+        id,
+        companyId: companyId
+      }
+    });
 
-    res.send({ data });
+    res.send({ data, user });
   } catch (error) {
     handleHttpError(res, "ERROR_GET_ITEM");
   }
@@ -29,9 +50,19 @@ const getItem = async (req, res) => {
 
 const createItem = async (req, res) => {
   try {
+    //para saber quien es la persona que esta consumiendo la peticion, la llamamos por medio de los datos de la sesion
+    const user = req.user;
+
+    // Obtener el ID de la compañía asociada al usuario
+    const companyId = user.companyId;
+
     const body = matchedData(req);
-    const data = await patientCase.create(body);
-    res.send({ data });
+
+    // Asignar companyId al campo companyId del body
+    body.companyId = companyId;
+
+    const data = await patientCaseModel.create(body);
+    res.send({ data, user });
   } catch (error) {
     handleHttpError(res, "ERROR_CREATE_ITEMS");
   }
@@ -44,7 +75,7 @@ const updateItem = async (req, res) => {
     // res.send({ data });
 
     // Find the record by its primary key (id)
-    const existingItem = await patientCase.findByPk(id);
+    const existingItem = await patientCaseModel.findByPk(id);
 
     if (!existingItem) {
       handleErrorResponse(res, "ITEM_NOT_FOUND", 404);
@@ -65,7 +96,7 @@ const deleteItem = async (req, res) => {
     const { id } = matchedData(req);
 
     // Encuentra el registro que deseas marcar como eliminado
-    const existingItem = await patientCase.findByPk(id);
+    const existingItem = await patientCaseModel.findByPk(id);
 
     if (!existingItem) {
       handleErrorResponse(res, "ITEM_NOT_FOUND", 404);

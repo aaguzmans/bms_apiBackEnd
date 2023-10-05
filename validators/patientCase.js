@@ -1,16 +1,16 @@
 const { check } = require("express-validator");
 const validateResults = require("../utils/handleValidator");
-const isValidDate = require("../utils/handleCustomDate");
 
 const validatorCreateItem = [
-  check("name").isLength({ max: 50 }),
+  check("companyId"),
+  check("patientCaseName").isLength({ max: 50 }),
   check("lastName").isLength({ max: 50 }),
   check("lastName2").isLength({ max: 50 }),
   check("identityCardTypeId"),
   check("identityCard").isLength({ max: 15 }),
   check("genderId"),
   check("profession").isLength({ max: 50 }),
-  check("dateOfBirth").custom(isValidDate),
+  check("dateOfBirth"),
   check("phoneNumber").isLength({ max: 15 }),
   check("phoneNumber2").isLength({ max: 15 }),
   check("countryId"),

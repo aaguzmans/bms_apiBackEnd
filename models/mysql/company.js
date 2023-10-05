@@ -8,7 +8,7 @@ const Company = sequelize.define(
       type: DataTypes.SMALLINT,
       primaryKey: true,
     },
-    name: {
+    companyName: {
       type: DataTypes.STRING,
     },
     address: {
@@ -26,7 +26,7 @@ const Company = sequelize.define(
     countryId: {
       type: DataTypes.SMALLINT,
     },
-    phone: {
+    phoneNumber: {
       type: DataTypes.STRING,
     },
     email: {

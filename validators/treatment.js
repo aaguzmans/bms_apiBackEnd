@@ -1,13 +1,13 @@
 const { check } = require("express-validator");
 const validateResults = require("../utils/handleValidator");
-const isValidDate = require("../utils/handleCustomDate");
 
 const validatorCreateItem = [
-  check("name").isLength({ max: 50 }),
+  check("companyId"),
+  check("treatmentName").isLength({ max: 50 }),
   check("dose").isLength({ max: 50 }),
   check("frequency").isLength({ max: 50 }),
-  check("startDate").custom(isValidDate),
-  check("endDate").custom(isValidDate),
+  check("startDate"),
+  check("endDate"),
   (req, res, next) => {
     return validateResults(req, res, next);
   },

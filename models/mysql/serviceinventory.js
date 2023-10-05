@@ -8,6 +8,9 @@ const ServiceInventory = sequelize.define(
       type: DataTypes.SMALLINT,
       primaryKey: true,
     },
+    companyId: {
+      type: DataTypes.SMALLINT,
+    },
     serviceId: {
       type: DataTypes.SMALLINT,
     },

@@ -8,7 +8,10 @@ const Supplier = sequelize.define(
       type: DataTypes.SMALLINT,
       primaryKey: true,
     },
-    name: {
+    companyId: {
+      type: DataTypes.SMALLINT,
+    },
+    supplierName: {
       type: DataTypes.STRING,
     },
     deletedAt: { // Agrega la columna "deletedAt" para soft delete

@@ -1,9 +1,8 @@
 const { check } = require("express-validator");
 const validateResults = require("../utils/handleValidator");
-const isValidDate = require("../utils/handleCustomDate");
 
 const validatorCreateItem = [
-  check("name").isLength({ max: 50 }),
+  check("companyId"),
   check("patientId"),
   check("alcoholConsumption").isBoolean(),
   check("smokingHabit").isBoolean(),

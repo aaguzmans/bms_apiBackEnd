@@ -8,7 +8,10 @@ const PatientCase = sequelize.define(
       type: DataTypes.SMALLINT,
       primaryKey: true,
     },
-    name: {
+    companyId: {
+      type: DataTypes.SMALLINT,
+    },
+    patientCaseName: {
       type: DataTypes.STRING,
     },
     lastName: {

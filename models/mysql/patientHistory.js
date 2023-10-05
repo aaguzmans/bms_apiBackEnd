@@ -8,6 +8,9 @@ const PatientHistory = sequelize.define(
       type: DataTypes.SMALLINT,
       primaryKey: true,
     },
+    companyId: {
+      type: DataTypes.SMALLINT,
+    },
     patientId: {
       type: DataTypes.SMALLINT,
     },

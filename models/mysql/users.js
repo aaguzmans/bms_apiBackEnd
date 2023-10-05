@@ -8,6 +8,12 @@ const User = sequelize.define(
       type: DataTypes.SMALLINT,
       primaryKey: true,
     },
+    companyId: {
+      type: DataTypes.SMALLINT,
+    },
+    countryId: {
+      type: DataTypes.SMALLINT,
+    },
     name: {
       type: DataTypes.STRING,
     },
@@ -38,9 +44,6 @@ const User = sequelize.define(
     phoneNumber2: {
       type: DataTypes.STRING,
     },
-    countryId: {
-      type: DataTypes.SMALLINT,
-    },
     city: {
       type: DataTypes.STRING,
     },
@@ -56,9 +59,6 @@ const User = sequelize.define(
     },
     password: {
       type: DataTypes.STRING,
-    },
-    companyId: {
-      type: DataTypes.SMALLINT,
     },
     rol: {
       type: DataTypes.STRING,

@@ -8,7 +8,10 @@ const Disease = sequelize.define(
       type: DataTypes.SMALLINT,
       primaryKey: true,
     },
-    name: {
+    companyId: {
+      type: DataTypes.SMALLINT,
+    },
+    diseaseName: {
       type: DataTypes.STRING,
     },
     deletedAt: { // Agrega la columna "deletedAt" para soft delete

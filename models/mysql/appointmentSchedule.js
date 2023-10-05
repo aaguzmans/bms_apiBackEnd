@@ -2,11 +2,14 @@ const { sequelize } = require("../../config/mysql");
 const { DataTypes } = require("sequelize");
 
 const AppointmentSchedule = sequelize.define(
-  "appointmentSchedule",
+  "appointment_schedule",
   {
     id: {
       type: DataTypes.SMALLINT,
       primaryKey: true,
+    },
+    companyId: {
+      type: DataTypes.SMALLINT,
     },
     patientId: {
       type: DataTypes.SMALLINT,
@@ -26,7 +29,7 @@ const AppointmentSchedule = sequelize.define(
     },
   },
   {
-    tableName: "appointmentSchedule",
+    tableName: "appointment_schedule",
     timestamps: true,
     paranoid: true, // Habilita el soft Delete
   },

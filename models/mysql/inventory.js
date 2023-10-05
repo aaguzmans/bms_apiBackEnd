@@ -8,13 +8,16 @@ const Inventory = sequelize.define(
       type: DataTypes.SMALLINT,
       primaryKey: true,
     },
+    companyId: {
+      type: DataTypes.SMALLINT,
+    },
     code: {
       type: DataTypes.STRING,
     },
     cabys: {
       type: DataTypes.STRING,
     },
-    name: {
+    inventoryName: {
       type: DataTypes.STRING,
     },
     description: {
