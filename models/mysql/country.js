@@ -1,5 +1,6 @@
 const { sequelize } = require("../../config/mysql");
 const { DataTypes } = require("sequelize");
+const sequelizePaginate = require('sequelize-paginate');
 
 const Country = sequelize.define(
   "country",
@@ -25,5 +26,8 @@ const Country = sequelize.define(
     paranoid: true, // Habilita el soft Delete
   },
 );
+
+// Aplica sequelizePaginate a tu modelo
+sequelizePaginate.paginate(Country);
 
 module.exports = Country;

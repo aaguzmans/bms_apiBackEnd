@@ -4,7 +4,13 @@ const cors = require("cors")
 const { dbConnect } = require("./config/mysql")
 const app = express()
 
-app.use(cors())
+// Configurar CORS para permitir solicitudes desde http://localhost:5173
+const corsOptions = {
+    origin: 'http://localhost:5173', // Cambia esto al origen de tu frontend
+    credentials: true, // Habilitar credenciales
+  };
+
+app.use(cors(corsOptions))
 app.use(express.json())
 
 const port = process.env.PORT || 3000

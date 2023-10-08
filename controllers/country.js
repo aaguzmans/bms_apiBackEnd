@@ -1,6 +1,7 @@
 const { matchedData } = require("express-validator");
 const { countryModel } = require("../models");
 const { handleHttpError } = require("../utils/handleError");
+const sequelizePaginate = require('sequelize-paginate');
 
 const getItems = async (req, res) => {
   try {
@@ -11,14 +12,18 @@ const getItems = async (req, res) => {
     // Obtener el ID de la compañía asociada al usuario
     const companyId = user.companyId;
 
-    // Consulta los registros donde companyId coincida con user.companyId
-    const data = await countryModel.findAll({
+    const { page, per_page } = req.query; // Obtén los parámetros de paginación
+    const pageSize = Math.max(parseInt(per_page), 8); // Asegúrate de que per_page sea al menos 8
+
+    const { docs, pages, total } = await countryModel.paginate({
       where: {
         companyId: companyId
-      }
+      },
+      page: parseInt(page), // Convierte a número entero
+      paginate: pageSize, // Establece el tamaño de la página
     });
 
-    res.send({ data, user });
+    res.send({ data: docs, user, pages, total, per_page: pageSize }); // Agrega el campo per_page a la respuesta
   } catch (error) {
     handleHttpError(res, "ERROR_GET_ITEMS");
   }

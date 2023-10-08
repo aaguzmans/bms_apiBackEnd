@@ -1,15 +1,25 @@
 const { matchedData } = require("express-validator");
 const { companyModel } = require("../models");
 const { handleHttpError } = require("../utils/handleError");
+const sequelizePaginate = require('sequelize-paginate');
 
 const getItems = async (req, res) => {
   try {
     //para saber quien es la persona que esta consumiendo la peticion, la llamamos por medio de los datos de la sesion
     const user = req.user;
 
-    const data = await companyModel.findAll();
+    const { page, per_page } = req.query; // Obtén los parámetros de paginación
+    const pageSize = Math.max(parseInt(per_page), 8); // Asegúrate de que per_page sea al menos 8
 
-    res.send({ data, user });
+    const { docs, pages, total } = await companyModel.paginate({
+      where: {
+        companyId: companyId
+      },
+      page: parseInt(page), // Convierte a número entero
+      paginate: pageSize, // Establece el tamaño de la página
+    });
+
+    res.send({ data: docs, user, pages, total, per_page: pageSize }); // Agrega el campo per_page a la respuesta
   } catch (error) {
     handleHttpError(res, "ERROR_GET_ITEMS");
   }

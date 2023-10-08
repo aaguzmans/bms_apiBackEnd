@@ -1,5 +1,6 @@
 const { sequelize } = require("../../config/mysql");
 const { DataTypes } = require("sequelize");
+const sequelizePaginate = require('sequelize-paginate');
 
 const AppointmentSchedule = sequelize.define(
   "appointment_schedule",
@@ -34,5 +35,8 @@ const AppointmentSchedule = sequelize.define(
     paranoid: true, // Habilita el soft Delete
   },
 );
+
+// Aplica sequelizePaginate a tu modelo
+sequelizePaginate.paginate(AppointmentSchedule);
 
 module.exports = AppointmentSchedule;

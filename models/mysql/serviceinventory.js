@@ -1,5 +1,6 @@
 const { sequelize } = require("../../config/mysql");
 const { DataTypes } = require("sequelize");
+const sequelizePaginate = require('sequelize-paginate');
 
 const ServiceInventory = sequelize.define(
   "service_inventory",
@@ -31,5 +32,8 @@ const ServiceInventory = sequelize.define(
     paranoid: true, // Habilita el soft Delete
   }
 );
+
+// Aplica sequelizePaginate a tu modelo
+sequelizePaginate.paginate(ServiceInventory);
 
 module.exports = ServiceInventory;

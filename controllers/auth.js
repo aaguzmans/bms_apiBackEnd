@@ -26,6 +26,17 @@ const registerCtrl = async (req, res) => {
     // Obtener el ID de la compañía recién creada
     const companyId = company.id;
 
+    // Verificar si el correo electrónico ya existe en la base de datos
+    const existingUser = await userModel.findOne({
+      where: {
+        email: req.email
+      }
+    });
+
+    if (existingUser) {
+      handleHttpError(res, "EMAIL_ALREADY_USED", 404);
+      return;}
+
     const password = await encrypt(req.password);
 
     //spread operator, nos permite
