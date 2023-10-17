@@ -1,5 +1,5 @@
 const { matchedData } = require("express-validator");
-const { companyModel } = require("../models");
+const { companyModel, countryModel } = require("../models");
 const { handleHttpError } = require("../utils/handleError");
 const sequelizePaginate = require('sequelize-paginate');
 
@@ -17,6 +17,13 @@ const getItems = async (req, res) => {
       },
       page: parseInt(page), // Convierte a número entero
       paginate: pageSize, // Establece el tamaño de la página
+      include: [
+        {
+          model:countryModel,
+          as: 'country',
+          attributes: ['id','countryName'],
+        }
+      ]
     });
 
     res.send({ data: docs, user, pages, total, per_page: pageSize }); // Agrega el campo per_page a la respuesta

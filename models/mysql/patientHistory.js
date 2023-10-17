@@ -12,9 +12,6 @@ const PatientHistory = sequelize.define(
     companyId: {
       type: DataTypes.SMALLINT,
     },
-    patientId: {
-      type: DataTypes.SMALLINT,
-    },
     alcoholConsumption: {
       type: DataTypes.BOOLEAN,
     },
@@ -38,6 +35,20 @@ const PatientHistory = sequelize.define(
     paranoid: true, // Habilita el soft Delete
   },
 );
+
+const Company = require('./company'); // Importa el modelo Service si aún no lo has hecho
+
+PatientHistory.belongsTo(Company, {
+  foreignKey: 'companyId', // Nombre del campo que relaciona PatientCase con Service
+  as: 'company', // Alias para la relación
+});
+
+/*const PatientCase = require('./patientCase'); // Importa el modelo Service si aún no lo has hecho
+
+PatientHistory.belongsTo(PatientHistory, {
+  foreignKey: 'companyId', // Nombre del campo que relaciona PatientCase con Service
+  as: 'company', // Alias para la relación
+});*/
 
 // Aplica sequelizePaginate a tu modelo
 sequelizePaginate.paginate(PatientHistory);

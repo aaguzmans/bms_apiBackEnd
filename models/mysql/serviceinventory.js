@@ -33,6 +33,27 @@ const ServiceInventory = sequelize.define(
   }
 );
 
+const Company = require('./company'); // Importa el modelo Service si aún no lo has hecho
+
+ServiceInventory.belongsTo(Company, {
+  foreignKey: 'companyId', // Nombre del campo que relaciona PatientCase con Service
+  as: 'company', // Alias para la relación
+});
+
+const Service = require('./service'); // Importa el modelo Service si aún no lo has hecho
+
+ServiceInventory.belongsTo(Service, {
+  foreignKey: 'serviceId', // Nombre del campo que relaciona PatientCase con Service
+  as: 'service', // Alias para la relación
+});
+
+const Inventory = require('./inventory'); // Importa el modelo Service si aún no lo has hecho
+
+ServiceInventory.belongsTo(Inventory, {
+  foreignKey: 'inventoryId', // Nombre del campo que relaciona PatientCase con Service
+  as: 'inventory', // Alias para la relación
+});
+
 // Aplica sequelizePaginate a tu modelo
 sequelizePaginate.paginate(ServiceInventory);
 

@@ -1,5 +1,5 @@
 const { matchedData } = require("express-validator");
-const { userModel } = require("../models");
+const { userModel, companyModel, identityCardModel, genderModel, countryModel } = require("../models");
 const { handleHttpError } = require("../utils/handleError");
 const { encrypt } = require("../utils/handlePassword");
 const sequelizePaginate = require('sequelize-paginate');
@@ -22,6 +22,28 @@ const getItems = async (req, res) => {
       },
       page: parseInt(page), // Convierte a número entero
       paginate: pageSize, // Establece el tamaño de la página
+      include: [
+        {
+          model:identityCardModel,
+          as: 'identityCardType',
+          attributes: ['id','identityCardName'],
+        },
+        {
+          model: genderModel, // Suponiendo que tienes un modelo llamado "Service" configurado
+          as: 'gender', // El nombre de la relación en el modelo "PatientCase"
+          attributes: ['id', 'genderName'], // Define los atributos del servicio que deseas incluir
+        },
+        {
+          model: countryModel,
+          as: 'country',
+          attributes: ['id','countryName'],
+        },
+        {
+          model: companyModel, // Suponiendo que tienes un modelo llamado "Service" configurado
+          as: 'company', // El nombre de la relación en el modelo "PatientCase"
+          attributes: ['id', 'companyName'], // Define los atributos del servicio que deseas incluir
+        }
+      ]
     });
 
     res.send({ data: docs, user, pages, total, per_page: pageSize }); // Agrega el campo per_page a la respuesta

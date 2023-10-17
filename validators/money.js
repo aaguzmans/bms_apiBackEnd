@@ -2,7 +2,6 @@ const { check } = require("express-validator");
 const validateResults = require("../utils/handleValidator");
 
 const validatorCreateItem = [
-  check("companyId"),
   check("moneyName").isLength({ max: 20 }),
   (req, res, next) => {
     return validateResults(req, res, next);

@@ -16,6 +16,7 @@ const models = {
     supplierModel: require('./mysql/supplier'),
     treatmentModel: require('./mysql/treatment'),
     userModel: require('./mysql/users'),
+    filesModel: require('./mysql/files'),
 }
 
 module.exports = models

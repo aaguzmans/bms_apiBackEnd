@@ -1,5 +1,5 @@
 const { matchedData } = require("express-validator");
-const { appointmentScheduleModel } = require("../models");
+const { appointmentScheduleModel, patientCaseModel, serviceModel, companyModel } = require("../models");
 const { handleHttpError } = require("../utils/handleError");
 const sequelizePaginate = require('sequelize-paginate');
 
@@ -19,12 +19,27 @@ const getItems = async (req, res) => {
       where: {
         companyId: companyId
       },
-      page: parseInt(page), // Convierte a número entero
-      paginate: pageSize, // Establece el tamaño de la página
+      page: parseInt(page),
+      paginate: pageSize,
+      include: [
+        {
+          model:patientCaseModel,
+          as: 'patientCase'
+        },
+        {
+          model: serviceModel,
+          as: 'service'
+        },
+        {
+          model: companyModel,
+          as: 'company'
+        }
+      ]
     });
 
     res.send({ data: docs, user, pages, total, per_page: pageSize }); // Agrega el campo per_page a la respuesta
   } catch (error) {
+    console.log(error)
     handleHttpError(res, "ERROR_GET_ITEMS");
   }
 };
@@ -76,10 +91,7 @@ const createItem = async (req, res) => {
 const updateItem = async (req, res) => {
   try {
     const { id, ...body } = matchedData(req);
-    // const data = await appointmentScheduleModel.findOneAndUpdate( id, body );
-    // res.send({ data });
 
-    // Find the record by its primary key (id)
     const existingItem = await appointmentScheduleModel.findByPk(id);
 
     if (!existingItem) {
@@ -92,6 +104,7 @@ const updateItem = async (req, res) => {
 
     res.send({ data: existingItem });
   } catch (error) {
+    console.log(error)
     handleHttpError(res, "ERROR_UPDATE_ITEMS");
   }
 };

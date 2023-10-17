@@ -79,6 +79,34 @@ const User = sequelize.define(
   }
 );
 
+const Company = require('./company'); // Importa el modelo Service si aún no lo has hecho
+
+User.belongsTo(Company, {
+  foreignKey: 'companyId', // Nombre del campo que relaciona User con Company
+  as: 'company', // Alias para la relación
+});
+
+const Country = require('./country'); // Importa el modelo Service si aún no lo has hecho
+
+User.belongsTo(Country, {
+  foreignKey: 'countryId', // Nombre del campo que relaciona User con Service
+  as: 'country', // Alias para la relación
+});
+
+const IdentityCardTypeId = require('./identityCard'); // Importa el modelo Service si aún no lo has hecho
+
+User.belongsTo(IdentityCardTypeId, {
+  foreignKey: 'identityCardId', // Nombre del campo que relaciona PatientCase con Service
+  as: 'identityCardType', // Alias para la relación
+});
+
+const Gender = require('./gender'); // Importa el modelo Service si aún no lo has hecho
+
+User.belongsTo(Gender, {
+  foreignKey: 'genderId', // Nombre del campo que relaciona PatientCase con Service
+  as: 'gender', // Alias para la relación
+});
+
 // Aplica sequelizePaginate a tu modelo
 sequelizePaginate.paginate(User);
 

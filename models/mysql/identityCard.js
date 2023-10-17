@@ -9,9 +9,6 @@ const IdentityCard = sequelize.define(
       type: DataTypes.SMALLINT,
       primaryKey: true,
     },
-    companyId: {
-      type: DataTypes.SMALLINT,
-    },
     identityCardName: {
       type: DataTypes.STRING,
     },

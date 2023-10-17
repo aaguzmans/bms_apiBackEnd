@@ -27,6 +27,13 @@ const Measurement = sequelize.define(
   },
 );
 
+const Company = require('./company'); // Importa el modelo Service si aún no lo has hecho
+
+Measurement.belongsTo(Company, {
+  foreignKey: 'companyId', // Nombre del campo que relaciona PatientCase con Service
+  as: 'company', // Alias para la relación
+});
+
 // Aplica sequelizePaginate a tu modelo
 sequelizePaginate.paginate(Measurement);
 

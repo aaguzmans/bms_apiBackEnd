@@ -79,6 +79,62 @@ const PatientCase = sequelize.define(
   }
 );
 
+const Company = require('./company'); // Importa el modelo Service si aún no lo has hecho
+
+PatientCase.belongsTo(Company, {
+  foreignKey: 'companyId', // Nombre del campo que relaciona PatientCase con Service
+  as: 'company', // Alias para la relación
+});
+
+const IdentityCardTypeId = require('./identityCard'); // Importa el modelo Service si aún no lo has hecho
+
+PatientCase.belongsTo(IdentityCardTypeId, {
+  foreignKey: 'identityCardTypeId', // Nombre del campo que relaciona PatientCase con Service
+  as: 'identityCardType', // Alias para la relación
+});
+
+const Gender = require('./gender'); // Importa el modelo Service si aún no lo has hecho
+
+PatientCase.belongsTo(Gender, {
+  foreignKey: 'genderId', // Nombre del campo que relaciona PatientCase con Service
+  as: 'gender', // Alias para la relación
+});
+
+const Country = require('./country'); // Importa el modelo Service si aún no lo has hecho
+
+PatientCase.belongsTo(Country, {
+  foreignKey: 'countryId', // Nombre del campo que relaciona PatientCase con Service
+  as: 'country', // Alias para la relación
+});
+
+const Service = require('./service'); // Importa el modelo Service si aún no lo has hecho
+
+PatientCase.belongsTo(Service, {
+  foreignKey: 'serviceId', // Nombre del campo que relaciona PatientCase con Service
+  as: 'service', // Alias para la relación
+});
+
+const PatientHistory = require('./patientHistory'); // Importa el modelo Service si aún no lo has hecho
+
+PatientCase.belongsTo(PatientHistory, {
+  foreignKey: 'patientHistoryId', // Nombre del campo que relaciona PatientCase con Service
+  as: 'patientHistory', // Alias para la relación
+});
+
+const Treatment = require('./treatment'); // Importa el modelo Service si aún no lo has hecho
+
+PatientCase.belongsTo(Treatment, {
+  foreignKey: 'treatmentId', // Nombre del campo que relaciona PatientCase con Service
+  as: 'treatment', // Alias para la relación
+});
+
+const Disease = require('./disease'); // Importa el modelo Service si aún no lo has hecho
+
+PatientCase.belongsTo(Disease, {
+  foreignKey: 'diseaseId', // Nombre del campo que relaciona PatientCase con Service
+  as: 'disease', // Alias para la relación
+});
+
 // Aplica sequelizePaginate a tu modelo
 sequelizePaginate.paginate(PatientCase);
 

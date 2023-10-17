@@ -3,7 +3,6 @@ const validateResults = require("../utils/handleValidator");
 
 const validatorCreateItem = [
   check("companyId"),
-  check("patientId"),
   check("alcoholConsumption").isBoolean(),
   check("smokingHabit").isBoolean(),
   check("drugsUse").isBoolean(),

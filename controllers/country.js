@@ -10,15 +10,12 @@ const getItems = async (req, res) => {
     const user = req.user;
 
     // Obtener el ID de la compañía asociada al usuario
-    const companyId = user.companyId;
+    //const companyId = user.companyId;
 
     const { page, per_page } = req.query; // Obtén los parámetros de paginación
     const pageSize = Math.max(parseInt(per_page), 8); // Asegúrate de que per_page sea al menos 8
 
     const { docs, pages, total } = await countryModel.paginate({
-      where: {
-        companyId: companyId
-      },
       page: parseInt(page), // Convierte a número entero
       paginate: pageSize, // Establece el tamaño de la página
     });
@@ -35,15 +32,14 @@ const getItem = async (req, res) => {
     const user = req.user;
 
     // Obtener el ID de la compañía asociada al usuario
-    const companyId = user.companyId;
+    //const companyId = user.companyId;
 
     req = matchedData(req);
     const { id } = req;
     // Consulta el registro por su clave primaria (id) y donde companyId coincida con user.companyId
     const data = await countryModel.findOne({
       where: {
-        id,
-        companyId: companyId
+        id
       }
     });
 
@@ -59,12 +55,12 @@ const createItem = async (req, res) => {
     const user = req.user;
 
     // Obtener el ID de la compañía asociada al usuario
-    const companyId = user.companyId;
+    //const companyId = user.companyId;
 
     const body = matchedData(req);
 
     // Asignar companyId al campo companyId del body
-    body.companyId = companyId;
+    //body.companyId = companyId;
 
     const data = await countryModel.create(body);
     res.send({ data, user });

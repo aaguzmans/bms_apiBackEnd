@@ -21,6 +21,16 @@ const validatorCreateItem = [
   check("patientHistoryId"),
   check("treatmentId"),
   check("diseaseId"),
+  check("alcoholConsumption"),
+  check("smokingHabit"),
+  check("drugsUse"),
+  check("foodAllergies"),
+  check("treatmentName"),
+  check("dose"),
+  check("frequency"),
+  check("startDate"),
+  check("endDate"),
+  check("diseaseName"),
   (req, res, next) => {
     return validateResults(req, res, next);
   },

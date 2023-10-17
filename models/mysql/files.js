@@ -1,30 +1,36 @@
 const { sequelize } = require("../../config/mysql");
 const { DataTypes } = require("sequelize");
-const sequelizePaginate = require('sequelize-paginate');
 
-const Money = sequelize.define(
-  "money",
+const Files = sequelize.define(
+  "files",
   {
     id: {
       type: DataTypes.SMALLINT,
       primaryKey: true,
     },
-    moneyName: {
+    companyId: {
+      type: DataTypes.SMALLINT,
+    },
+    file: {
+      type: DataTypes.TEXT,
+    },
+    fileName: {
       type: DataTypes.STRING,
     },
-    deletedAt: { // Agrega la columna "deletedAt" para soft delete
+    fileType: {
+        type: DataTypes.STRING,
+      },
+    deletedAt: {
+      // Agrega la columna "deletedAt" para soft delete
       type: DataTypes.DATE,
       allowNull: true,
     },
   },
   {
-    tableName: "money",
+    tableName: "files",
     timestamps: true,
     paranoid: true, // Habilita el soft Delete
-  },
+  }
 );
 
-// Aplica sequelizePaginate a tu modelo
-sequelizePaginate.paginate(Money);
-
-module.exports = Money;
+module.exports = Files;

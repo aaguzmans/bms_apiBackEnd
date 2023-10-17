@@ -9,9 +9,6 @@ const Gender = sequelize.define(
       type: DataTypes.SMALLINT,
       primaryKey: true,
     },
-    companyId: {
-      type: DataTypes.SMALLINT,
-    },
     genderName: {
       type: DataTypes.STRING,
     },

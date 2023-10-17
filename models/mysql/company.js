@@ -51,6 +51,13 @@ const Company = sequelize.define(
   },
 );
 
+const Country = require('./country'); // Importa el modelo Service si aún no lo has hecho
+
+Company.belongsTo(Country, {
+  foreignKey: 'countryId', // Nombre del campo que relaciona Company con Country
+  as: 'country', // Alias para la relación
+});
+
 // Aplica sequelizePaginate a tu modelo
 sequelizePaginate.paginate(Company);
 

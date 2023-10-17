@@ -9,9 +9,6 @@ const Country = sequelize.define(
       type: DataTypes.SMALLINT,
       primaryKey: true,
     },
-    companyId: {
-      type: DataTypes.SMALLINT,
-    },
     countryName: {
       type: DataTypes.STRING,
     },
