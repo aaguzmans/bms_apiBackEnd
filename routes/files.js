@@ -12,7 +12,7 @@ router.get("/", authMiddleware, checkRol(["admin"]), getItems);
 
 router.get("/:id", authMiddleware, checkRol(["admin"]), validatorGetItem, getItem);
 
-router.post("/", upload.single("file"), createItem);
+router.post("/", authMiddleware, checkRol(["admin"]), upload.single("file"), createItem);
 
 router.put("/:id", authMiddleware, checkRol(["admin"]), validatorGetItem, updateItem);
 

@@ -13,15 +13,14 @@ const getItems = async (req, res) => {
       },
     });
 
-    // Mapear los datos y convertir el campo 'file' a base64
     const dataWithBase64File = data.map((file) => {
-      const base64File = Buffer.from(file.file).toString("base64");
+      const base64File = file.file.toString('base64');
       return {
         id: file.id,
         companyId: file.companyId,
         fileName: file.fileName,
         fileType: file.fileType,
-        file: base64File, // Convierte 'file' a base64
+        file: base64File,
       };
     });
 
@@ -44,11 +43,8 @@ const getItem = async (req, res) => {
       return handleHttpError(res, "FILE_NOT_FOUND", 404);
     }
 
-    // Convierte el campo 'file' a base64
-    const base64File = Buffer.from(file.file).toString("base64");
-
     res.send({
-      file: base64File,
+      file: file.file,
       fileName: file.fileName,
       fileType: file.fileType,
       user: req.user,
@@ -61,35 +57,33 @@ const getItem = async (req, res) => {
 const createItem = async (req, res) => {
   try {
     const user = req.user;
-    //const companyId = user.companyId;
-    console.log(req)
+    const companyId = user.companyId;
     const uploadedFile = req.file;
-    //const fileName = uploadedFile.originalname;
-    console.log(uploadedFile)
+
     if (!uploadedFile) {
       return res
         .status(400)
         .json({ error: "No se proporcionó ningún archivo" });
     }
 
-    //const fileName = req.body.fileName;
-    //const fileType = req.body.fileType;
+    // Convierte el buffer hexadecimal a binario
+    const binaryBuffer = Buffer.from(uploadedFile.buffer, 'hex');
 
-    //const fileData = {
-      //companyId: companyId,
-      //file: uploadedFile.buffer,
-      //fileName: fileName,
-      //fileType: fileType,
-    //};
+    // Luego, convierte el buffer binario a base64
+    const base64File = binaryBuffer.toString("base64");
 
-    console.log("uno");
-    console.log(uploadedFile);
-    console.log("dos");
-    //console.log(fileName);
+    const fileData = {
+      companyId: companyId,
+      file: base64File,
+      fileName: uploadedFile.originalname,
+      fileType: uploadedFile.mimetype,
+    };
 
-    //res.send({ data: fileData, user });
+    await filesModel.create(fileData);
+
+    res.send({ data: fileData, user });
   } catch (error) {
-    console.error(error);
+    console.log(error);
     handleHttpError(res, "ERROR_CREATE_FILE");
   }
 };
@@ -110,7 +104,6 @@ const updateItem = async (req, res) => {
       return;
     }
 
-    // Recuerda que Multer ya ha procesado y almacenado el archivo en req.file
     const base64File = req.file.buffer.toString("base64");
 
     body.file = base64File;
