@@ -64,7 +64,44 @@ const getItem = async (req, res) => {
 
     res.send({ data, user });
   } catch (error) {
+    console.log(error)
     handleHttpError(res, "ERROR_GET_ITEM");
+  }
+};
+
+const getItemsByPatientId = async (req, res) => {
+  try {
+    req = matchedData(req);
+    const { patientId } = req; // Obtén los parámetros de paginación y el patientId
+    const pageSize = Math.max(parseInt(8)); // Asegúrate de que per_page sea al menos 8
+
+    // Puedes ajustar esta parte según la estructura de tus modelos y relaciones
+    const { docs, pages, total } = await appointmentScheduleModel.paginate({
+      where: {
+        patientId: patientId // Filtrar por el patientId proporcionado
+      },
+      page: parseInt(1),
+      paginate: pageSize,
+      include: [
+        {
+          model: patientCaseModel,
+          as: 'patientCase'
+        },
+        {
+          model: serviceModel,
+          as: 'service'
+        },
+        {
+          model: companyModel,
+          as: 'company'
+        }
+      ]
+    });
+
+    res.send({ data: docs, pages, total, per_page: pageSize });
+  } catch (error) {
+    console.log(error);
+    handleHttpError(res, "ERROR_GET_ITEMS");
   }
 };
 
@@ -75,15 +112,16 @@ const createItem = async (req, res) => {
 
     // Obtener el ID de la compañía asociada al usuario
     const companyId = user.companyId;
-
+    
     const body = matchedData(req);
-
+    
     // Asignar companyId al campo companyId del body
     body.companyId = companyId;
 
     const data = await appointmentScheduleModel.create(body);
     res.send({ data, user });
   } catch (error) {
+    console.log(error)
     handleHttpError(res, "ERROR_CREATE_ITEMS");
   }
 };
@@ -126,9 +164,10 @@ const deleteItem = async (req, res) => {
 
     res.send({ data: existingItem });
   } catch (error) {
+    console.log(error)
     handleHttpError(res, "ERROR_DELETE_ITEM");
   }
 };
 
 
-module.exports = { getItems, getItem, createItem, updateItem, deleteItem };
+module.exports = { getItems, getItem, getItemsByPatientId, createItem, updateItem, deleteItem };

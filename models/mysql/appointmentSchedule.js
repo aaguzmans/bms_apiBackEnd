@@ -21,6 +21,9 @@ const AppointmentSchedule = sequelize.define(
     appointmentDate: {
       type: DataTypes.DATE,
     },
+    appointmentEndDate: {
+      type: DataTypes.DATE
+    },
     appointmentNotes: {
       type: DataTypes.STRING,
     },

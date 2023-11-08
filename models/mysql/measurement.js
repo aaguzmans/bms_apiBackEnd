@@ -9,9 +9,6 @@ const Measurement = sequelize.define(
       type: DataTypes.SMALLINT,
       primaryKey: true,
     },
-    companyId: {
-      type: DataTypes.SMALLINT,
-    },
     measurementName: {
       type: DataTypes.STRING,
     },
@@ -26,13 +23,6 @@ const Measurement = sequelize.define(
     paranoid: true, // Habilita el soft Delete
   },
 );
-
-const Company = require('./company'); // Importa el modelo Service si aún no lo has hecho
-
-Measurement.belongsTo(Company, {
-  foreignKey: 'companyId', // Nombre del campo que relaciona PatientCase con Service
-  as: 'company', // Alias para la relación
-});
 
 // Aplica sequelizePaginate a tu modelo
 sequelizePaginate.paginate(Measurement);

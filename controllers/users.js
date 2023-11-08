@@ -1,12 +1,17 @@
 const { matchedData } = require("express-validator");
-const { userModel, companyModel, identityCardModel, genderModel, countryModel } = require("../models");
+const {
+  userModel,
+  companyModel,
+  identityCardModel,
+  genderModel,
+  countryModel,
+} = require("../models");
 const { handleHttpError } = require("../utils/handleError");
-const { encrypt } = require("../utils/handlePassword");
-const sequelizePaginate = require('sequelize-paginate');
+const { encrypt, compare } = require("../utils/handlePassword");
+const sequelizePaginate = require("sequelize-paginate");
 
 const getItems = async (req, res) => {
   try {
-
     //para saber quien es la persona que esta consumiendo la peticion, la llamamos por medio de los datos de la sesion
     const user = req.user;
 
@@ -18,32 +23,32 @@ const getItems = async (req, res) => {
 
     const { docs, pages, total } = await userModel.paginate({
       where: {
-        companyId: companyId
+        companyId: companyId,
       },
       page: parseInt(page), // Convierte a número entero
       paginate: pageSize, // Establece el tamaño de la página
       include: [
         {
-          model:identityCardModel,
-          as: 'identityCardType',
-          attributes: ['id','identityCardName'],
+          model: identityCardModel,
+          as: "identityCardType",
+          attributes: ["id", "identityCardName"],
         },
         {
           model: genderModel, // Suponiendo que tienes un modelo llamado "Service" configurado
-          as: 'gender', // El nombre de la relación en el modelo "PatientCase"
-          attributes: ['id', 'genderName'], // Define los atributos del servicio que deseas incluir
+          as: "gender", // El nombre de la relación en el modelo "PatientCase"
+          attributes: ["id", "genderName"], // Define los atributos del servicio que deseas incluir
         },
         {
           model: countryModel,
-          as: 'country',
-          attributes: ['id','countryName'],
+          as: "country",
+          attributes: ["id", "countryName"],
         },
         {
           model: companyModel, // Suponiendo que tienes un modelo llamado "Service" configurado
-          as: 'company', // El nombre de la relación en el modelo "PatientCase"
-          attributes: ['id', 'companyName'], // Define los atributos del servicio que deseas incluir
-        }
-      ]
+          as: "company", // El nombre de la relación en el modelo "PatientCase"
+          attributes: ["id", "companyName"], // Define los atributos del servicio que deseas incluir
+        },
+      ],
     });
 
     res.send({ data: docs, user, pages, total, per_page: pageSize }); // Agrega el campo per_page a la respuesta
@@ -66,12 +71,31 @@ const getItem = async (req, res) => {
     const data = await userModel.findOne({
       where: {
         id,
-        companyId: companyId
-      }
+        companyId: companyId,
+      },
+      include: [
+        {
+          model: identityCardModel,
+          as: "identityCardType",
+        },
+        {
+          model: genderModel,
+          as: "gender",
+        },
+        {
+          model: countryModel,
+          as: "country",
+        },
+        {
+          model: companyModel,
+          as: "company",
+        },
+      ],
     });
 
     res.send({ data, user });
   } catch (error) {
+    console.log(error);
     handleHttpError(res, "ERROR_GET_ITEM");
   }
 };
@@ -90,13 +114,14 @@ const createItem = async (req, res) => {
     const existingUser = await userModel.findOne({
       where: {
         companyId: companyId,
-        email: body.email
-      }
+        email: body.email,
+      },
     });
 
     if (existingUser) {
       handleHttpError(res, "EMAIL_ALREADY_USED", 404);
-      return;}
+      return;
+    }
 
     // Asignar companyId al campo companyId del body
     body.companyId = companyId;
@@ -117,10 +142,8 @@ const createItem = async (req, res) => {
 const updateItem = async (req, res) => {
   try {
     const { id, ...body } = matchedData(req);
-    // const data = await companyModel.findOneAndUpdate( id, body );
-    // res.send({ data });
 
-    // Find the record by its primary key (id)
+    // Encuentra el registro por su clave primaria (id)
     const existingItem = await userModel.findByPk(id);
 
     if (!existingItem) {
@@ -128,17 +151,23 @@ const updateItem = async (req, res) => {
       return;
     }
 
-    // Verifica si se proporcionó una nueva contraseña y la encripta
     if (body.password) {
-      const password = await encrypt(body.password);
-      body.password = password;
+      // Verifica si la contraseña proporcionada es más corta de 30 caracteres
+      if (body.password.length < 30) {
+        const newPasswordHash = await encrypt(body.password);
+        body.password = newPasswordHash;
+      } else {
+        body.password = existingItem.password
+      }
+    } else {
+      delete body.password;
     }
-
-    // Update the attributes of the found record
+    // Actualiza los atributos del registro encontrado
     await existingItem.update(body);
 
     res.send({ data: existingItem });
   } catch (error) {
+    console.log(error);
     handleHttpError(res, "ERROR_UPDATE_ITEMS");
   }
 };

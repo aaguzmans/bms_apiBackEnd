@@ -178,6 +178,7 @@ const createItem = async (req, res) => {
       patientId: PatientCaseId,
       serviceId: serviceId,
       appointmentDate: new Date(), // Establecer la fecha actual
+      appointmentEndDate: "",
       appointmentNotes: "",
     };
 
@@ -223,6 +224,7 @@ const updateItem = async (req, res) => {
       smokingHabit: req.body.patientHistory.smokingHabit,
       drugsUse: req.body.patientHistory.drugsUse,
       foodAllergies: req.body.patientHistory.foodAllergies,
+      drugsAllergies: req.body.patientHistory.drugsAllergies,
     };
 
     const treatmentId = req.body.patientCase.treatmentId;
@@ -312,6 +314,7 @@ const deleteItem = async (req, res) => {
     );
     const existingtreatmentItem = await treatmentModel.findByPk(treatmentId);
     const existingdiseaseItem = await diseaseModel.findByPk(diseaseId);
+    const existingappointmentScheduleItem = await appointmentScheduleModel.findByPk(id);
 
     // Marca el registro como eliminado (soft delete) en el campo DeletedAt con la fecha de "eliminacion"
     await existingItem.destroy();

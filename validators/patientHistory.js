@@ -7,6 +7,7 @@ const validatorCreateItem = [
   check("smokingHabit").isBoolean(),
   check("drugsUse").isBoolean(),
   check("foodAllergies").isBoolean(),
+  check("drugsAllergies").isLength({ max: 100 }),
   (req, res, next) => {
     return validateResults(req, res, next);
   },

@@ -96,7 +96,7 @@ User.belongsTo(Country, {
 const IdentityCardTypeId = require('./identityCard'); // Importa el modelo Service si aún no lo has hecho
 
 User.belongsTo(IdentityCardTypeId, {
-  foreignKey: 'identityCardId', // Nombre del campo que relaciona PatientCase con Service
+  foreignKey: 'identityCardTypeId', // Nombre del campo que relaciona PatientCase con Service
   as: 'identityCardType', // Alias para la relación
 });
 

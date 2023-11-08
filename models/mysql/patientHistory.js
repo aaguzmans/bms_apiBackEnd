@@ -24,6 +24,9 @@ const PatientHistory = sequelize.define(
     foodAllergies: {
       type: DataTypes.BOOLEAN,
     },
+    drugsAllergies: {
+      type: DataTypes.STRING,
+    },
     deletedAt: { // Agrega la columna "deletedAt" para soft delete
       type: DataTypes.DATE,
       allowNull: true,

@@ -73,6 +73,7 @@ const updateItem = async (req, res) => {
 
     res.send({ data: existingItem });
   } catch (error) {
+    console.log(error)
     handleHttpError(res, "ERROR_UPDATE_ITEMS");
   }
 };

@@ -6,6 +6,7 @@ const validatorCreateItem = [
   check("patientId"),
   check("serviceId"),
   check("appointmentDate"),
+  check("appointmentEndDate"),
   check("appointmentNotes").isLength({ max: 250 }),
   (req, res, next) => {
     return validateResults(req, res, next);
@@ -19,4 +20,11 @@ const validatorGetItem = [
   },
 ];
 
-module.exports = { validatorGetItem, validatorCreateItem };
+const validatorGetPatientId = [
+  check("patientId").exists(),
+  (req, res, next) => {
+    return validateResults(req, res, next);
+  },
+];
+
+module.exports = { validatorGetItem, validatorGetPatientId, validatorCreateItem };

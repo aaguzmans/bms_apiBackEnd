@@ -9,29 +9,17 @@ const getItems = async (req, res) => {
     //para saber quien es la persona que esta consumiendo la peticion, la llamamos por medio de los datos de la sesion
     const user = req.user;
 
-    // Obtener el ID de la compañía asociada al usuario
-    const companyId = user.companyId;
-
     const { page, per_page } = req.query; // Obtén los parámetros de paginación
     const pageSize = Math.max(parseInt(per_page), 8); // Asegúrate de que per_page sea al menos 8
 
     const { docs, pages, total } = await measurementModel.paginate({
-      where: {
-        companyId: companyId
-      },
-      page: parseInt(page), // Convierte a número entero
-      paginate: pageSize, // Establece el tamaño de la página
-      include: [
-        {
-          model: companyModel, // Suponiendo que tienes un modelo llamado "Service" configurado
-          as: 'company', // El nombre de la relación en el modelo "PatientCase"
-          attributes: ['id', 'companyName'], // Define los atributos del servicio que deseas incluir
-        }
-      ]
+      page: parseInt(page),
+      paginate: pageSize,
     });
 
     res.send({ data: docs, user, pages, total, per_page: pageSize }); // Agrega el campo per_page a la respuesta
   } catch (error) {
+    console.log(error)
     handleHttpError(res, "ERROR_GET_ITEMS");
   }
 };
