@@ -78,6 +78,29 @@ const getItem = async (req, res) => {
   }
 };
 
+const getLatestItem = async (req, res) => {
+  try {
+    const user = req.user;
+    const companyId = user.companyId;
+
+    const data = await patientCaseModel.findOne({
+      where: { companyId },
+      order: [['createdAt', 'DESC']],
+    });
+
+    if (data) {
+      res.send({ data, user });
+    } else {
+      res.send({ message: 'No se encontraron registros.' });
+    }
+  } catch (error) {
+    console.error('Error al obtener el último registro:', error);
+    handleHttpError(res, "ERROR_GET_LATEST_ITEM");
+  }
+};
+
+
+
 const createItem = async (req, res) => {
   try {
     const user = req.user;
@@ -329,4 +352,4 @@ const deleteItem = async (req, res) => {
   }
 };
 
-module.exports = { getItems, getItem, createItem, updateItem, deleteItem };
+module.exports = { getItems, getItem, getLatestItem, createItem, updateItem, deleteItem };

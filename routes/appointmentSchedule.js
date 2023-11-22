@@ -1,22 +1,71 @@
 const express = require("express");
 const router = express.Router();
-const authMiddleware = require("../middleware/session")
-const checkRol  = require("../middleware/rol")
-const { validatorGetItem, validatorGetPatientId, validatorCreateItem } = 
-require("../validators/appointmentSchedule")
-const { getItems, getItem, getItemsByPatientId, createItem, updateItem, deleteItem } = 
-require("../controllers/appointmentSchedule");
+const authMiddleware = require("../middleware/session");
+const checkRol = require("../middleware/rol");
+const {
+  validatorGetItem,
+  validatorGetPatientId,
+  validatorCreateItem,
+} = require("../validators/appointmentSchedule");
+const {
+  getItems,
+  getItem,
+  getItemsByPatientId,
+  createItem,
+  updateItem,
+  deleteItem,
+} = require("../controllers/appointmentSchedule");
 
 router.get("/", authMiddleware, checkRol(["admin"]), getItems);
 
-router.get("/:id",authMiddleware, checkRol(["admin"]), validatorGetItem, getItem);
+router.get(
+  "/:id",
+  authMiddleware,
+  checkRol(["admin"]),
+  validatorGetItem,
+  getItem
+);
 
-router.get("/patient/:patientId", authMiddleware, checkRol(["admin"]), validatorGetPatientId, getItemsByPatientId);
+router.get(
+  "/patient/:patientId",
+  authMiddleware,
+  checkRol(["admin"]),
+  validatorGetPatientId,
+  getItemsByPatientId
+);
 
-router.post("/",authMiddleware, checkRol(["admin"]), validatorCreateItem, createItem);
+// Modificada para permitir filtros
+router.get(
+  "/filtered",
+  authMiddleware,
+  checkRol(["admin"]),
+  validatorGetItem,
+  getItems
+);
 
-router.put("/:id",authMiddleware, checkRol(["admin"]), validatorGetItem, validatorCreateItem, updateItem);
+router.post(
+  "/",
+  authMiddleware,
+  checkRol(["admin"]),
+  validatorCreateItem,
+  createItem
+);
 
-router.delete("/:id",authMiddleware, checkRol(["admin"]), validatorGetItem, deleteItem);
+router.put(
+  "/:id",
+  authMiddleware,
+  checkRol(["admin"]),
+  validatorGetItem,
+  validatorCreateItem,
+  updateItem
+);
 
-module.exports = router
+router.delete(
+  "/:id",
+  authMiddleware,
+  checkRol(["admin"]),
+  validatorGetItem,
+  deleteItem
+);
+
+module.exports = router;
