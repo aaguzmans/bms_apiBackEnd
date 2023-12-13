@@ -17,6 +17,7 @@ const models = {
     treatmentModel: require('./mysql/treatment'),
     userModel: require('./mysql/users'),
     filesModel: require('./mysql/files'),
+    sessionModel: require('./mysql/sessionWA'),
 }
 
 module.exports = models

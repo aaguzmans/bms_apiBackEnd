@@ -42,6 +42,7 @@ const getItems = async (req, res) => {
 
     res.send({ data: docs, user, pages, total, per_page: pageSize }); // Agrega el campo per_page a la respuesta
   } catch (error) {
+    console.log(error)
     handleHttpError(res, "ERROR_GET_ITEMS");
   }
 };
@@ -66,7 +67,45 @@ const getItem = async (req, res) => {
 
     res.send({ data, user });
   } catch (error) {
+    console.log(error)
     handleHttpError(res, "ERROR_GET_ITEM");
+  }
+};
+
+const getItemsByServiceId = async (req, res) => {
+  try {
+    const user = req.user;
+    const companyId = user.companyId;
+    const { serviceId } = req.params;
+
+    const body = await serviceinventoryModel.findAll({
+      where: {
+        companyId: companyId,
+        serviceId: serviceId,
+      },
+      include: [
+        {
+          model: inventoryModel,
+          as: 'inventory',
+          attributes: ['id', 'inventoryName'],
+        },
+        {
+          model: serviceModel,
+          as: 'service',
+          attributes: ['id', 'serviceName'],
+        },
+        {
+          model: companyModel,
+          as: 'company',
+          attributes: ['id', 'companyName'],
+        },
+      ],
+    });
+
+    res.send({ data: body });
+  } catch (error) {
+    console.log(error);
+    handleHttpError(res, "ERROR_GET_ITEMS_BY_SERVICE_ID");
   }
 };
 
@@ -86,6 +125,7 @@ const createItem = async (req, res) => {
     const data = await serviceinventoryModel.create(body);
     res.send({ data, user });
   } catch (error) {
+    console.log(error)
     handleHttpError(res, "ERROR_CREATE_ITEMS");
   }
 };
@@ -109,6 +149,7 @@ const updateItem = async (req, res) => {
 
     res.send({ data: existingItem });
   } catch (error) {
+    console.log(error)
     handleHttpError(res, "ERROR_UPDATE_ITEMS");
   }
 };
@@ -130,9 +171,10 @@ const deleteItem = async (req, res) => {
 
     res.send({ data: existingItem });
   } catch (error) {
+    console.log(error)
     handleHttpError(res, "ERROR_DELETE_ITEM");
   }
 };
 
 
-module.exports = { getItems, getItem, createItem, updateItem, deleteItem };
+module.exports = { getItems, getItem, getItemsByServiceId, createItem, updateItem, deleteItem };

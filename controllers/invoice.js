@@ -1,11 +1,18 @@
 const { matchedData } = require("express-validator");
-const { invoiceModel, patientCaseModel, serviceModel, moneyModel, companyModel } = require("../models");
+const {
+  invoiceModel,
+  patientCaseModel,
+  serviceModel,
+  moneyModel,
+  companyModel,
+  serviceinventoryModel,
+  inventoryModel,
+} = require("../models");
 const { handleHttpError } = require("../utils/handleError");
-const sequelizePaginate = require('sequelize-paginate');
+const sequelizePaginate = require("sequelize-paginate");
 
 const getItems = async (req, res) => {
   try {
-
     //para saber quien es la persona que esta consumiendo la peticion, la llamamos por medio de los datos de la sesion
     const user = req.user;
 
@@ -17,32 +24,32 @@ const getItems = async (req, res) => {
 
     const { docs, pages, total } = await invoiceModel.paginate({
       where: {
-        companyId: companyId
+        companyId: companyId,
       },
       page: parseInt(page), // Convierte a número entero
       paginate: pageSize, // Establece el tamaño de la página
       include: [
         {
-          model:patientCaseModel,
-          as: 'patientCase',
-          attributes: ['id','patientName','lastName','lastName2'],
+          model: patientCaseModel,
+          as: "patientCase",
+          attributes: ["id", "patientName", "lastName", "lastName2"],
         },
         {
           model: serviceModel, // Suponiendo que tienes un modelo llamado "Service" configurado
-          as: 'service', // El nombre de la relación en el modelo "PatientCase"
-          attributes: ['id', 'serviceName'], // Define los atributos del servicio que deseas incluir
+          as: "service", // El nombre de la relación en el modelo "PatientCase"
+          attributes: ["id", "serviceName"], // Define los atributos del servicio que deseas incluir
         },
         {
           model: moneyModel,
-          as: 'money',
-          attributes: ['id','moneyName'],
+          as: "money",
+          attributes: ["id", "moneyName"],
         },
         {
           model: companyModel, // Suponiendo que tienes un modelo llamado "Service" configurado
-          as: 'company', // El nombre de la relación en el modelo "PatientCase"
-          attributes: ['id', 'companyName'], // Define los atributos del servicio que deseas incluir
-        }
-      ]
+          as: "company", // El nombre de la relación en el modelo "PatientCase"
+          attributes: ["id", "companyName"], // Define los atributos del servicio que deseas incluir
+        },
+      ],
     });
 
     res.send({ data: docs, user, pages, total, per_page: pageSize }); // Agrega el campo per_page a la respuesta
@@ -65,8 +72,8 @@ const getItem = async (req, res) => {
     const data = await invoiceModel.findOne({
       where: {
         id,
-        companyId: companyId
-      }
+        companyId: companyId,
+      },
     });
 
     res.send({ data, user });
@@ -77,20 +84,39 @@ const getItem = async (req, res) => {
 
 const createItem = async (req, res) => {
   try {
-    //para saber quien es la persona que esta consumiendo la peticion, la llamamos por medio de los datos de la sesion
     const user = req.user;
-
-    // Obtener el ID de la compañía asociada al usuario
     const companyId = user.companyId;
-
     const body = matchedData(req);
-
-    // Asignar companyId al campo companyId del body
     body.companyId = companyId;
 
     const data = await invoiceModel.create(body);
+
+    // Obtener información del serviceinventory mediante serviceId
+    const serviceInventoryServiceId = body.serviceId;
+    const serviceInventoryS = await serviceinventoryModel.findOne({
+      where: { serviceId: serviceInventoryServiceId },
+    });
+
+    // Obtener la cantidad de serviceinventory
+    const serviceInventoryQuantity = serviceInventoryS.quantity;
+
+    // Obtener información del serviceinventory mediante inventoryId
+    const serviceInventoryInventoryId = serviceInventoryS.inventoryId; // Asegúrate de tener el campo correcto aquí
+    const serviceInventoryI = await serviceinventoryModel.findOne({
+      where: { inventoryId: serviceInventoryInventoryId }
+    });
+
+    // Actualizar la cantidad en inventory
+    const inventoryId = serviceInventoryI.inventoryId;
+    const inventory = await inventoryModel.findByPk(inventoryId);
+    if (inventory) {
+      const newInventoryQuantity = inventory.quantity - serviceInventoryQuantity;
+      await inventory.update({ quantity: newInventoryQuantity });
+    }
+
     res.send({ data, user });
   } catch (error) {
+    console.log(error);
     handleHttpError(res, "ERROR_CREATE_ITEMS");
   }
 };
@@ -138,6 +164,5 @@ const deleteItem = async (req, res) => {
     handleHttpError(res, "ERROR_DELETE_ITEM");
   }
 };
-
 
 module.exports = { getItems, getItem, createItem, updateItem, deleteItem };

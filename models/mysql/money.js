@@ -12,6 +12,9 @@ const Money = sequelize.define(
     moneyName: {
       type: DataTypes.STRING,
     },
+    moneyCode: {
+      type: DataTypes.STRING,
+    },
     deletedAt: { // Agrega la columna "deletedAt" para soft delete
       type: DataTypes.DATE,
       allowNull: true,

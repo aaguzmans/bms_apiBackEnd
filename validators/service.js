@@ -7,6 +7,7 @@ const validatorCreateItem = [
   check("serviceName").exists().notEmpty(),
   check("descriptionService").isLength({ max: 500 }),
   check("cost").isFloat(),
+  check("moneyId"),
   (req, res, next) => {
     return validateResults(req, res, next);
   },

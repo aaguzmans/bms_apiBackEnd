@@ -4,8 +4,10 @@ const authMiddleware = require("../middleware/session")
 const checkRol  = require("../middleware/rol")
 const { validatorGetItem, validatorCreateItem } = 
 require("../validators/money")
-const { getItems, getItem, createItem, updateItem, deleteItem } = 
+const { getItems, getItem, createItem, updateItem, deleteItem, getExchangeRate } = 
 require("../controllers/money");
+
+router.get('/exchange-rate/:base/:target',authMiddleware, checkRol(["admin"]), getExchangeRate);
 
 router.get("/", authMiddleware, checkRol(["admin"]), getItems);
 

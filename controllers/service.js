@@ -1,5 +1,5 @@
 const { matchedData } = require("express-validator");
-const { serviceModel, companyModel } = require("../models");
+const { serviceModel, companyModel, moneyModel } = require("../models");
 const { handleHttpError } = require("../utils/handleError");
 const sequelizePaginate = require('sequelize-paginate');
 
@@ -23,7 +23,11 @@ const getItems = async (req, res) => {
           model: companyModel, // Suponiendo que tienes un modelo llamado "Service" configurado
           as: 'company', // El nombre de la relación en el modelo "PatientCase"
           attributes: ['id', 'companyName'], // Define los atributos del servicio que deseas incluir
-        }
+        },
+        {
+          model: moneyModel, // Suponiendo que tienes un modelo llamado "Service" configurado
+          as: 'money', // El nombre de la relación en el modelo "PatientCase"
+        },
       ]
     });
 

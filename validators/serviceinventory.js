@@ -3,7 +3,6 @@ const validateResults = require("../utils/handleValidator");
 
 const validatorCreateItem = [
   check("companyId"),
-  check("code").isLength({ max: 20 }),
   check("serviceId"),
   check("inventoryId"),
   check("quantity").isNumeric(),

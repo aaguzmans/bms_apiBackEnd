@@ -3,6 +3,7 @@ const validateResults = require("../utils/handleValidator");
 
 const validatorCreateItem = [
   check("moneyName").isLength({ max: 20 }),
+  check("moneyCode").isLength({ max: 5 }),
   (req, res, next) => {
     return validateResults(req, res, next);
   },

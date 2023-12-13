@@ -12,6 +12,9 @@ const Service = sequelize.define(
     companyId: {
       type: DataTypes.SMALLINT,
     },
+    moneyId: {
+      type: DataTypes.SMALLINT,
+    },
     code: {
       type: DataTypes.STRING,
     },
@@ -41,6 +44,13 @@ const Company = require('./company'); // Importa el modelo Service si aún no lo
 Service.belongsTo(Company, {
   foreignKey: 'companyId', // Nombre del campo que relaciona PatientCase con Service
   as: 'company', // Alias para la relación
+});
+
+const Money = require('./money'); // Importa el modelo Service si aún no lo has hecho
+
+Service.belongsTo(Money, {
+  foreignKey: 'moneyId', // Nombre del campo que relaciona PatientCase con Service
+  as: 'money', // Alias para la relación
 });
 
 // Aplica sequelizePaginate a tu modelo

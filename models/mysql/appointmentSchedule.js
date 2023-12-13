@@ -19,13 +19,16 @@ const AppointmentSchedule = sequelize.define(
       type: DataTypes.SMALLINT,
     },
     appointmentDate: {
-      type: DataTypes.DATE,
+      type: DataTypes.STRING,
     },
     appointmentEndDate: {
-      type: DataTypes.DATE
+      type: DataTypes.STRING
     },
     appointmentNotes: {
       type: DataTypes.STRING,
+    },
+    isMessageSent: {
+      type: DataTypes.BOOLEAN,
     },
     deletedAt: { // Agrega la columna "deletedAt" para soft delete
       type: DataTypes.DATE,

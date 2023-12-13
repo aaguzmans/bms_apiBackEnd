@@ -2,6 +2,7 @@ const { matchedData } = require("express-validator");
 const { moneyModel } = require("../models");
 const { handleHttpError } = require("../utils/handleError");
 const sequelizePaginate = require('sequelize-paginate');
+const axios = require('axios');
 
 const getItems = async (req, res) => {
   try {
@@ -113,5 +114,16 @@ const deleteItem = async (req, res) => {
   }
 };
 
+const getExchangeRate = async (req, res) => {
+  try {
+    const { base, target } = req.params;
+    const response = await axios.get(`https://open.er-api.com/v6/latest/${base}`);
+    const exchangeRate = response.data.rates[target];
+    res.json({ exchangeRate });
+  } catch (error) {
+    console.error('Error al obtener la tasa de cambio:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
 
-module.exports = { getItems, getItem, createItem, updateItem, deleteItem };
+module.exports = { getItems, getItem, createItem, updateItem, deleteItem, getExchangeRate };

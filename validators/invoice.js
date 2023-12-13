@@ -7,12 +7,12 @@ const validatorCreateItem = [
   check("patientId"),
   check("serviceId"),
   check("moneyId"),
-  check("percentageDiscount").isNumeric(),
-  check("discount").isFloat(),
-  check("descriptionDiscount").isLength({ max: 500 }),
-  check("grossCost").isFloat(),
-  check("netCost").isFloat(),
-  check("totalAmount").isFloat(),
+  check("percentageDiscount"),
+  check("discount"),
+  check("descriptionDiscount"),
+  check("grossCost"),
+  check("netCost"),
+  check("totalAmount"),
   (req, res, next) => {
     return validateResults(req, res, next);
   },

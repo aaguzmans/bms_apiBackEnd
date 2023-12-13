@@ -4,8 +4,10 @@ const authMiddleware = require("../middleware/session")
 const checkRol  = require("../middleware/rol")
 const { validatorGetItem, validatorCreateItem } = 
 require("../validators/serviceinventory")
-const { getItems, getItem, createItem, updateItem, deleteItem } = 
+const { getItems, getItem, getItemsByServiceId, createItem, updateItem, deleteItem } = 
 require("../controllers/serviceinventory");
+
+router.get("/service/:serviceId", authMiddleware, checkRol(["admin"]), getItemsByServiceId);
 
 router.get("/", authMiddleware, checkRol(["admin"]), getItems);
 

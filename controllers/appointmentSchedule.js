@@ -1,52 +1,58 @@
 const { matchedData } = require("express-validator");
 const { Op } = require("sequelize");
-const { appointmentScheduleModel, patientCaseModel, serviceModel, companyModel } = require("../models");
+const {
+  appointmentScheduleModel,
+  patientCaseModel,
+  serviceModel,
+  companyModel,
+} = require("../models");
 const { handleHttpError } = require("../utils/handleError");
-const sequelizePaginate = require('sequelize-paginate');
+const sequelizePaginate = require("sequelize-paginate");
 
 const getItems = async (req, res) => {
   try {
     const user = req.user;
     const companyId = user.companyId;
 
-    const { page, per_page, patientCaseName, appointmentDate, identityCard } = req.query;
+    const { page, per_page, patientCaseName, appointmentDate, identityCard } =
+      req.query;
     const pageSize = Math.max(parseInt(per_page), 8);
 
     const whereCondition = {
-      companyId: companyId
+      companyId: companyId,
     };
 
     const includeConditions = [
       {
         model: patientCaseModel,
-        as: 'patientCase',
-        where: {}
+        as: "patientCase",
+        where: {},
       },
       {
         model: serviceModel,
-        as: 'service'
+        as: "service",
       },
       {
         model: companyModel,
-        as: 'company'
-      }
+        as: "company",
+      },
     ];
 
     if (patientCaseName) {
       includeConditions[0].where.patientCaseName = {
-        [Op.like]: `%${patientCaseName}%`
+        [Op.like]: `%${patientCaseName}%`,
       };
     }
 
     if (appointmentDate) {
       whereCondition.appointmentDate = {
-        [Op.like]: `%${appointmentDate}%`
+        [Op.like]: `%${appointmentDate}%`,
       };
     }
 
     if (identityCard) {
       includeConditions[0].identityCard = {
-        [Op.like]: `%${identityCard}%`
+        [Op.like]: `%${identityCard}%`,
       };
     }
 
@@ -54,7 +60,7 @@ const getItems = async (req, res) => {
       where: whereCondition,
       page: parseInt(page),
       paginate: pageSize,
-      include: includeConditions
+      include: includeConditions,
     });
 
     res.send({ data: docs, user, pages, total, per_page: pageSize });
@@ -63,7 +69,6 @@ const getItems = async (req, res) => {
     handleHttpError(res, "ERROR_GET_ITEMS");
   }
 };
-
 
 const getItem = async (req, res) => {
   try {
@@ -79,13 +84,13 @@ const getItem = async (req, res) => {
     const data = await appointmentScheduleModel.findOne({
       where: {
         id,
-        companyId: companyId
-      }
+        companyId: companyId,
+      },
     });
 
     res.send({ data, user });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     handleHttpError(res, "ERROR_GET_ITEM");
   }
 };
@@ -99,24 +104,24 @@ const getItemsByPatientId = async (req, res) => {
     // Puedes ajustar esta parte según la estructura de tus modelos y relaciones
     const { docs, pages, total } = await appointmentScheduleModel.paginate({
       where: {
-        patientId: patientId // Filtrar por el patientId proporcionado
+        patientId: patientId, // Filtrar por el patientId proporcionado
       },
       page: parseInt(1),
       paginate: pageSize,
       include: [
         {
           model: patientCaseModel,
-          as: 'patientCase'
+          as: "patientCase",
         },
         {
           model: serviceModel,
-          as: 'service'
+          as: "service",
         },
         {
           model: companyModel,
-          as: 'company'
-        }
-      ]
+          as: "company",
+        },
+      ],
     });
 
     res.send({ data: docs, pages, total, per_page: pageSize });
@@ -133,16 +138,16 @@ const createItem = async (req, res) => {
 
     // Obtener el ID de la compañía asociada al usuario
     const companyId = user.companyId;
-    
+
     const body = matchedData(req);
-    
+
     // Asignar companyId al campo companyId del body
     body.companyId = companyId;
 
     const data = await appointmentScheduleModel.create(body);
     res.send({ data, user });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     handleHttpError(res, "ERROR_CREATE_ITEMS");
   }
 };
@@ -163,7 +168,7 @@ const updateItem = async (req, res) => {
 
     res.send({ data: existingItem });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     handleHttpError(res, "ERROR_UPDATE_ITEMS");
   }
 };
@@ -185,10 +190,16 @@ const deleteItem = async (req, res) => {
 
     res.send({ data: existingItem });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     handleHttpError(res, "ERROR_DELETE_ITEM");
   }
 };
 
-
-module.exports = { getItems, getItem, getItemsByPatientId, createItem, updateItem, deleteItem };
+module.exports = {
+  getItems,
+  getItem,
+  getItemsByPatientId,
+  createItem,
+  updateItem,
+  deleteItem,
+};
