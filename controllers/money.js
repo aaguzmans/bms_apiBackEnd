@@ -23,6 +23,7 @@ const getItems = async (req, res) => {
 
     res.send({ data: docs, user, pages, total, per_page: pageSize }); // Agrega el campo per_page a la respuesta
   } catch (error) {
+    console.log(error)
     handleHttpError(res, "ERROR_GET_ITEMS");
   }
 };

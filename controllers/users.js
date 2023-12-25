@@ -31,22 +31,18 @@ const getItems = async (req, res) => {
         {
           model: identityCardModel,
           as: "identityCardType",
-          attributes: ["id", "identityCardName"],
         },
         {
           model: genderModel, // Suponiendo que tienes un modelo llamado "Service" configurado
           as: "gender", // El nombre de la relación en el modelo "PatientCase"
-          attributes: ["id", "genderName"], // Define los atributos del servicio que deseas incluir
         },
         {
           model: countryModel,
           as: "country",
-          attributes: ["id", "countryName"],
         },
         {
           model: companyModel, // Suponiendo que tienes un modelo llamado "Service" configurado
           as: "company", // El nombre de la relación en el modelo "PatientCase"
-          attributes: ["id", "companyName"], // Define los atributos del servicio que deseas incluir
         },
       ],
     });
@@ -157,7 +153,7 @@ const updateItem = async (req, res) => {
         const newPasswordHash = await encrypt(body.password);
         body.password = newPasswordHash;
       } else {
-        body.password = existingItem.password
+        body.password = existingItem.password;
       }
     } else {
       delete body.password;

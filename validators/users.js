@@ -17,6 +17,7 @@ const validatorCreateItem = [
   check("city").isLength({ max: 50 }),
   check("address").isLength({ max: 250 }),
   check("email").isLength({ max: 50 }),
+  check("senderEmailPass"),
   check("username").isLength({ max: 50 }),
   check("password").isLength({ max: 150 }),
   check("rol").isLength({ max: 25 }),

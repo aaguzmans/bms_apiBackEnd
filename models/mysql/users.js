@@ -55,6 +55,9 @@ const User = sequelize.define(
       type: DataTypes.STRING,
       unique:true,
     },
+    senderEmailPass: {
+      type: DataTypes.STRING,
+    },
     username: {
       type: DataTypes.STRING,
     },

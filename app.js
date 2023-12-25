@@ -2,7 +2,9 @@ require("dotenv").config()
 const express = require("express")
 const cors = require("cors")
 const { dbConnect } = require("./config/mysql")
+
 const app = express()
+
 
 // Configurar CORS para permitir solicitudes desde http://localhost:5173
 const corsOptions = {
@@ -11,7 +13,7 @@ const corsOptions = {
   };
 
 app.use(cors(corsOptions))
-app.use(express.json())
+app.use(express.json({ limit: '50mb' })); 
 
 const port = process.env.PORT || 3000
 

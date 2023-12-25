@@ -10,6 +10,8 @@ const {
 } = require("../models");
 const { handleHttpError } = require("../utils/handleError");
 const sequelizePaginate = require("sequelize-paginate");
+const nodemailer = require('nodemailer');
+const { sub } = require("date-fns");
 
 const getItems = async (req, res) => {
   try {
@@ -81,6 +83,48 @@ const getItem = async (req, res) => {
     handleHttpError(res, "ERROR_GET_ITEM");
   }
 };
+
+const sendEmail = async (req, res) => {
+
+  const pdfBuffer = req.file.buffer;
+
+  const { from, senderEmailPass, to, subject, text, pdf } = req.body;
+  
+  if (!from || !to || !subject || !text || !pdf) {
+    console.log("Faltan parámetros requeridos")
+    //return res.send({ success: false, message: 'Faltan parámetros requeridos' });
+  }
+  try {
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: from,
+        pass: senderEmailPass, //'lcgf iudy pvfo qiyq'
+      },
+    });
+
+    const mailOptions = {
+      from,
+      to,
+      subject,
+      text,
+      attachments: [
+        {
+          filename: `${subject}.pdf`,
+          content: pdfBuffer,
+          encoding: "base64",
+        },
+      ],
+    };
+
+    const result = await transporter.sendMail(mailOptions);
+    console.log('Correo electrónico enviado:', result);
+    res.send({ success: true, message: 'Correo electrónico enviado con éxito' });
+  } catch (error) {
+    console.error('Error al enviar el correo electrónico:', error);
+    handleHttpError(res, "ERROR_SEND_INVOICE");
+  }
+}
 
 const createItem = async (req, res) => {
   try {
@@ -165,4 +209,4 @@ const deleteItem = async (req, res) => {
   }
 };
 
-module.exports = { getItems, getItem, createItem, updateItem, deleteItem };
+module.exports = { getItems, getItem, sendEmail, createItem, updateItem, deleteItem };
