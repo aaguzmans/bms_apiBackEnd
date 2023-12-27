@@ -8,7 +8,7 @@ const app = express()
 
 // Configurar CORS para permitir solicitudes desde http://localhost:5173
 const corsOptions = {
-    origin: 'https://bms-cr-e88bb.web.app/', // Cambia esto al origen de tu frontend
+    origin: 'https://bms-cr-e88bb.web.app', // Cambia esto al origen de tu frontend
     credentials: true, // Habilitar credenciales
   };
 
