@@ -99,7 +99,7 @@ const sendEmail = async (req, res) => {
       service: 'gmail',
       auth: {
         user: from,
-        pass: senderEmailPass, //'lcgf iudy pvfo qiyq'
+        pass: senderEmailPass, 
       },
     });
 
